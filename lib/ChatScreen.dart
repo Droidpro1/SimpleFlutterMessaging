@@ -6,7 +6,7 @@ class ChatScreen extends StatefulWidget {
   State createState() => new ChatScreenState();
 }
 
-class ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = new TextEditingController(); //to manage interactions withing the text field
   @override
@@ -36,6 +36,13 @@ class ChatScreenState extends State<ChatScreen> {
         ]
       )
     );
+  }
+
+  @override
+  void dispose() {
+    for (ChatMessage message in _messages)
+      message.animationController.dispose();
+    super.dispose();
   }
 
   Widget _buildTextComposer() {
@@ -78,11 +85,16 @@ class ChatScreenState extends State<ChatScreen> {
     //when the user sends the message, clear the input and add it to the list
     _textController.clear();
     ChatMessage message = new ChatMessage(
-      text: text
+      text: text,
+      animationController: new AnimationController(
+          duration: new Duration(milliseconds: 700),
+          vsync: this
+      )
     );
     //once the message has been sent, use setState the rebuild the UI
     setState(() {
       _messages.insert(0, message);
     });
+    message.animationController.forward();
   }
 }
