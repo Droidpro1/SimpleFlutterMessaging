@@ -1,6 +1,6 @@
-# flutter_scratch
+# flutter_FriendlyChat
 
-A random Flutter application.
+A random Flutter messaging application.
 
 ## Getting Started
 
